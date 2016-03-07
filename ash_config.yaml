@@ -1,0 +1,4 @@
+name: Util
+package: github.com/ash-shell/util
+default_alias: util
+callable_prefix: Util

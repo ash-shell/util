@@ -25,12 +25,60 @@ ArrayList__construct(){
 }
 
 ################################################################
+# if $2 is not passed:
 # Appends the specified element to the end of this list. ^
 #
-# @1: Element to be appended to this list ^
+# If $2 is passed:
+# Inserts the specified element at the specified position in
+# this list. ^
+#
+# @param $1: Element to be appended to this list ^
+# @param [$2]: Position to append the element.  This value must
+#   be an integer within (0 - ArrayList Size) inclusive.
 ################################################################
 ArrayList__add(){
-    ArrayList_array[$(ArrayList__size)]="$1"
+    local element="$1"
+    local position="$2"
+    local size="$(ArrayList__size)"
+
+    # End of the array
+    if [[ -z "$position" || "$position" = "$size" ]]; then
+        ArrayList_array["$size"]="$element"
+
+    # Position in the middle of the array
+    elif [[ "$position" =~ ^[0-9]+$ && "$position" -le "$size" ]]; then
+        local new_list=()
+        local new_size=$((size+1))
+
+        local counter=0
+        while [  "$counter" -lt "$new_size" ]; do
+            # Before the new value
+            if [[ $counter -lt $position ]]; then
+                local val=$(ArrayList__get $counter)
+                new_list["$counter"]="$val"
+
+            # The new value
+            elif [[ $counter -eq $position ]]; then
+                new_list["$counter"]="$element"
+
+            # After the new value
+            else
+                local pos=$((counter-1))
+                local val=$(ArrayList__get "$pos")
+                new_list["$counter"]="$val"
+            fi
+
+            # Increment Counter
+            let counter=counter+1
+        done
+        ArrayList_array=( "${new_list[@]}" )
+
+    # Invalid position
+    else
+        Logger__error 'Error at ArrayList.add'
+        Logger__error 'Position ($2) must be an integer between (0 - ArrayList Size) inclusive'
+        exit
+    fi
 }
 
 ################################################################
@@ -94,7 +142,7 @@ ArrayList__index_of() {
     local size=$(ArrayList__size)
     local counter=0
     while [  $counter -lt $size ]; do
-        val=$(ArrayList__get $counter)
+        local val=$(ArrayList__get $counter)
         if [[ $val = $1 ]]; then
             echo $counter
             return
@@ -116,7 +164,7 @@ ArrayList__to_string() {
     local size=$(ArrayList__size)
     local counter=0
     while [  $counter -lt $size ]; do
-        val=$(ArrayList__get $counter)
+        local val=$(ArrayList__get $counter)
         printf "$val"
         if [[ $counter -lt $size-1 ]]; then
             printf ", "

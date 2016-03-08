@@ -47,4 +47,12 @@ Util__callable_main(){
     Obj__call $dogs add "Roofus"
     echo "Cats: $(Obj__call $cats to_string)"
     echo "Dogs: $(Obj__call $dogs to_string)"
+
+    Logger__alert 'Adding Dogby to dogs at [0]'
+    Obj__call $dogs add "Dogby" "0"
+    echo "Dogs: $(Obj__call $dogs to_string)"
+
+    Logger__alert 'Adding Droopy to dogs at [3]'
+    Obj__call $dogs add "Droopy" "3"
+    echo "Dogs: $(Obj__call $dogs to_string)"
 }

@@ -133,6 +133,23 @@ ArrayList__clone(){
 }
 
 ################################################################
+# @param $1: The item to check existence in the array
+#
+# @returns $Ash__true if the list contains the element,
+#   $Ash__false otherwise.
+################################################################
+ArrayList__contains() {
+    local index=$(ArrayList__index_of "$1")
+    if [[ "$index" != "-1" ]]; then
+        echo $Ash__TRUE
+    else
+        echo $Ash__FALSE
+    fi
+}
+
+################################################################
+# @param $1: The item to get the index of
+#
 # @returns the index of the first occurrence of the
 # specified element in this list, or -1 if this list
 # does not contain the element. ^

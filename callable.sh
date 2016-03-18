@@ -55,4 +55,12 @@ Util__callable_main(){
     Logger__alert 'Adding Droopy to dogs at [3]'
     Obj__call $dogs add "Droopy" "3"
     echo "Dogs: $(Obj__call $dogs to_string)"
+
+    Logger__alert 'Checking if dogs contains Droopy'
+    local contains_droopy=$(Obj__call $dogs contains "Droopy")
+    echo "Dogs contains Droopy: $contains_droopy"
+
+    Logger__alert 'Checking if cats contains Droopy'
+    local contains_droopy=$(Obj__call $cats contains "Droopy")
+    echo "Cats contains Droopy: $contains_droopy"
 }
